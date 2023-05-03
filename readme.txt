@@ -1,7 +1,7 @@
-<h1># Introduction:</h1>
+<h1># Introduction:<h1/>
 This API project is a Express application that allows users to create and participate in timed quizzes. The API offers functionalities for creating a quiz, getting the active, finshed, and upcoming quizzes, getting quiz results, and retrieving all quizzes. The quizzes created by users are stored in a database, and the API should handle errors and return appropriate error responses.
 
-<h1># Functionalities:</h1>
+<h1># Functionalities:<h1/>
 
 1. Create a Quiz:
 To create a quiz, users need to send a POST request to the API with the following fields:

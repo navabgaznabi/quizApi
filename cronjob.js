@@ -1,9 +1,10 @@
 const cron = require("node-cron");
 const Quizzes = require("./models/quizzesModel");
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+dotenv.config({ path: ".env" });
 
-DB =
-	"mongodb+srv://navabg321:gZlEuuwBVd5hI6al@cluster0.tjas2zc.mongodb.net/test";
+DB = process.env.DB;
 
 mongoose.connect(DB).then(() => {
 	console.log("*****************starting*******************");
@@ -16,14 +17,14 @@ mongoose.connect(DB).then(() => {
 					document.endDate >= Date.now() &&
 					document.status !== "active"
 				) {
-					console.log("Document Updated: " + document.name);
+					console.log("Document Updated: ", document.name);
 					document.status = "active";
 				}
 				if (
 					document.endDate < Date.now() &&
 					document.status !== "finished"
 				) {
-					console.log("Document Updated: " + document.name);
+					console.log("Document Updated: ", document.name);
 
 					document.status = "finished";
 				}
@@ -31,7 +32,7 @@ mongoose.connect(DB).then(() => {
 					document.startDate > Date.now() &&
 					document.status !== "inactive"
 				) {
-					console.log("Document Updated: " + document.name);
+					console.log("Document Updated: ", document.name);
 					document.status = "inactive";
 				}
 				document.save();
@@ -40,7 +41,6 @@ mongoose.connect(DB).then(() => {
 			console.log(e);
 		}
 	});
-	console.log("******************Stopped********************");
 });
 
 // Schedule the cron job to run every minute

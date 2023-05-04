@@ -59,6 +59,11 @@ try {
 				type: Date,
 				default: Date.now,
 			},
+			status: {
+				type: String,
+				enum: ["inactive", "active", "finished"],
+				default: "inactive",
+			},
 		},
 		{
 			versionKey: false,
@@ -66,18 +71,29 @@ try {
 			toObject: { virtuals: true },
 		}
 	);
-
-	// Define the virtual field for status
-	QuizSchema.virtual("status").get(function () {
-		const now = new Date();
-		if (now < this.startDate) {
-			return "inactive";
-		} else if (now >= this.startDate && now < this.endDate) {
-			return "active";
+	//populating status.
+	QuizSchema.pre("save", function (next) {
+		if (this.startDate <= Date.now() && this.endDate >= Date.now()) {
+			this.status = "active";
+		} else if (this.endDate < Date.now()) {
+			this.status = "finished";
 		} else {
-			return "finished";
+			this.status = "inactive";
 		}
+		next();
 	});
+
+	// // Define the virtual field for status
+	// QuizSchema.virtual("status").get(function () {
+	// 	const now = new Date();
+	// 	if (now < this.startDate) {
+	// 		return "inactive";
+	// 	} else if (now >= this.startDate && now < this.endDate) {
+	// 		return "active";
+	// 	} else {
+	// 		return "finished";
+	// 	}
+	// });
 
 	module.exports = mongoose.model("Quiz", QuizSchema);
 } catch (err) {
